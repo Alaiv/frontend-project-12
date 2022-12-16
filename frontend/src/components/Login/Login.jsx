@@ -5,7 +5,7 @@ import {
 import * as Yup from 'yup';
 import { Navigate } from 'react-router-dom';
 import cl from './Login.module.css';
-import loginUser from '../api/ApiProvider';
+import { loginUser } from '../api/ApiProvider';
 import AuthContext from '../contexts';
 
 const Login = () => {
@@ -40,7 +40,6 @@ const Login = () => {
       <h1>Login page</h1>
 
       <form onSubmit={formik.handleSubmit}>
-        {console.log(formik.status)}
         <div className={cl.form}>
           <div>
             <input
