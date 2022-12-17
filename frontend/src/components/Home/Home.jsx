@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import AuthContext from '../contexts';
-import cl from './Home.module.css';
 import ChatArea from './chatArea/ChatArea';
 
 const Home = () => {
@@ -16,24 +18,48 @@ const Home = () => {
   }
 
   return (
-    <div className={cl.container}>
-      <div className={cl.channels}>
-        <h3>Channels</h3>
-        <div className={cl.chats}>
-          {Object.values(channels).map((channel) => (
-            <div key={channel.id}>
-              #
-              {channel.name}
+    <Container className="h-100 my-4 overflow-hidden rounded shadow">
+      <Row className="h-100 bg-white flex-md-row">
+        <Col className="col-4 col-md-2 border-end pt-5 px-0 bg-light">
+          <div>
+            <h3>Channels</h3>
+            <div>
+              {Object.values(channels).map((channel) => (
+                <div key={channel.id}>
+                  #
+                  {channel.name}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
-      <ChatArea
-        messagesData={messagesData}
-        currentChannelId={currentChannelId}
-        channels={channels}
-      />
-    </div>
+          </div>
+        </Col>
+        <Col className="col p-0 h-100">
+          <ChatArea
+            messagesData={messagesData}
+            currentChannelId={currentChannelId}
+            channels={channels}
+          />
+        </Col>
+      </Row>
+    </Container>
+    // <div className={cl.container}>
+    //   <div className={cl.channels}>
+    //     <h3>Channels</h3>
+    //     <div className={cl.chats}>
+    //       {Object.values(channels).map((channel) => (
+    //         <div key={channel.id}>
+    //           #
+    //           {channel.name}
+    //         </div>
+    //       ))}
+    //     </div>
+    //   </div>
+    //   <ChatArea
+    //     messagesData={messagesData}
+    //     currentChannelId={currentChannelId}
+    //     channels={channels}
+    //   />
+    // </div>
   );
 };
 

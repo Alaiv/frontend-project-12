@@ -1,8 +1,11 @@
 import { useFormik } from 'formik';
 import React, { useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import Button from 'react-bootstrap/esm/Button.js';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/esm/Row.js';
+import Col from 'react-bootstrap/esm/Col.js';
 import { sendMessage } from '../../api/SocketProvider.js';
-import cl from './ChatArea.module.css';
 import { actions } from '../../../redux/homePageSlice';
 import AuthContext, { SocketContext } from '../../contexts';
 
@@ -28,13 +31,13 @@ const ChatArea = ({ channels, currentChannelId, messagesData }) => {
   });
 
   return (
-    <div className={cl.messages}>
+    <div>
       <h3>
         Current active chat:
         {' '}
         {channels[currentChannelId]?.name}
       </h3>
-      <div className={cl.chatArea}>
+      <div>
         {messagesData.messages
           .filter((msg) => msg.currentChannelId === currentChannelId)
           .map((message) => (
@@ -47,10 +50,16 @@ const ChatArea = ({ channels, currentChannelId, messagesData }) => {
             </React.Fragment>
           ))}
       </div>
-      <form onSubmit={formik.handleSubmit} className={cl.form}>
-        <textarea name="message" id="message" onChange={formik.handleChange} value={formik.values.message} className={cl.area} required />
-        <button type="submit" className={cl.btn}>Submit</button>
-      </form>
+      <Form onSubmit={formik.handleSubmit}>
+        <Row>
+          <Col>
+            <Form.Control name="message" id="message" onChange={formik.handleChange} value={formik.values.message} required />
+          </Col>
+          <Col>
+            <Button variant="primary" type="submit">Войти</Button>
+          </Col>
+        </Row>
+      </Form>
     </div>
   );
 };
