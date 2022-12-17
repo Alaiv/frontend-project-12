@@ -23,8 +23,9 @@ const Login = () => {
     onSubmit: (values, { resetForm, setStatus }) => {
       loginUser(values)
         .then((response) => {
-          const { token } = response;
+          const { token, username } = response;
           localStorage.setItem('token', token);
+          localStorage.setItem('username', username);
           setIsAuth(true);
           setStatus(null);
         })

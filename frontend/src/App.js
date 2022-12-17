@@ -5,12 +5,14 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Home from './components/Home/Home';
 import Login from './components/Login/Login';
-import AuthContext from './components/contexts';
+import AuthContext, { socket, SocketContext } from './components/contexts';
 import { getUserData } from './components/api/ApiProvider';
 import { actions } from './redux/homePageSlice.js';
+import PageRoutes from './PageRoutes';
 
 const App = () => {
   const token = localStorage.getItem('token');
+  const username = localStorage.getItem('username') ?? 'guest';
   const [isAuth, setIsAuth] = useState(!!token);
   const dispatch = useDispatch();
 
@@ -21,19 +23,17 @@ const App = () => {
       dispatch(setAllData(data));
     };
     if (isAuth) getData();
-  }, [isAuth, token]);
+  }, [isAuth]);
 
-  // eslint-disable-next-line react/jsx-no-constructed-context-values
-  const authData = { isAuth, setIsAuth };
+  const authData = { isAuth, setIsAuth, username };
+
   return (
     <AuthContext.Provider value={authData}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/*" element={<h1>Error 404 Page not found</h1>} />
-        </Routes>
-      </BrowserRouter>
+      <SocketContext.Provider value={socket}>
+        <BrowserRouter>
+          <PageRoutes />
+        </BrowserRouter>
+      </SocketContext.Provider>
     </AuthContext.Provider>
   );
 };

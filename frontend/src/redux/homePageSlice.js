@@ -6,9 +6,7 @@ const initialState = {
     currentChannelId: null,
   },
   messagesData: {
-    messages: [
-      { channelId: 1, text: 'hello there' },
-    ],
+    messages: [],
   },
 };
 
@@ -22,8 +20,10 @@ const homePageSlice = createSlice({
         state.channelData.channels[channel.id] = channel;
       });
       state.channelData.currentChannelId = currentChannelId;
-      const msgs = messages.length ? messages : [{ channelId: 1, id: 1, text: 'hello there' }, { channelId: 1, id: 2, text: 'hello there2' }];
-      state.messagesData.messages = msgs;
+      state.messagesData.messages = messages;
+    },
+    setMessage: (state, { payload }) => {
+      state.messagesData.messages.push(payload);
     },
   },
 });

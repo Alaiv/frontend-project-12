@@ -1,9 +1,7 @@
 import React from 'react';
+import { io } from 'socket.io-client';
 
-// const authorization = {
-//   isAuth: false,
-// };
+export default React.createContext(false);
 
-const AuthContext = React.createContext(false);
-
-export default AuthContext;
+export const socket = io();
+export const SocketContext = React.createContext();

@@ -35,3 +35,6 @@ rules:
   testing-library/no-debug: 0
   react/jsx-filename-extension: [1, { "extensions": [".js", ".jsx"] }]
   no-param-reassign: 0
+  react/jsx-no-constructed-context-values: 0
+  no-unused-vars: 0
+  react-hooks/exhaustive-deps: 0
