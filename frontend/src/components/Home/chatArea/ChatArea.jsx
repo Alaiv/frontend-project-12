@@ -37,7 +37,7 @@ const ChatArea = ({ channels, currentChannelId, messagesData }) => {
         {' '}
         {channels[currentChannelId]?.name}
       </h3>
-      <div>
+      <div className="chat-messages overflow-auto px-5 ">
         {messagesData.messages
           .filter((msg) => msg.currentChannelId === currentChannelId)
           .map((message) => (
@@ -50,16 +50,18 @@ const ChatArea = ({ channels, currentChannelId, messagesData }) => {
             </React.Fragment>
           ))}
       </div>
-      <Form onSubmit={formik.handleSubmit}>
-        <Row>
-          <Col>
-            <Form.Control name="message" id="message" onChange={formik.handleChange} value={formik.values.message} required />
-          </Col>
-          <Col>
-            <Button variant="primary" type="submit">Войти</Button>
-          </Col>
-        </Row>
-      </Form>
+      <div className="mt-auto px-5 py-3">
+        <Form onSubmit={formik.handleSubmit} className="py-1">
+          <Row>
+            <Col>
+              <Form.Control name="message" id="message" onChange={formik.handleChange} value={formik.values.message} required />
+            </Col>
+            <Col>
+              <Button variant="primary" type="submit">Отправить</Button>
+            </Col>
+          </Row>
+        </Form>
+      </div>
     </div>
   );
 };

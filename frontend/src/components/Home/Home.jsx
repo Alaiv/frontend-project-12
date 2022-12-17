@@ -42,24 +42,6 @@ const Home = () => {
         </Col>
       </Row>
     </Container>
-    // <div className={cl.container}>
-    //   <div className={cl.channels}>
-    //     <h3>Channels</h3>
-    //     <div className={cl.chats}>
-    //       {Object.values(channels).map((channel) => (
-    //         <div key={channel.id}>
-    //           #
-    //           {channel.name}
-    //         </div>
-    //       ))}
-    //     </div>
-    //   </div>
-    //   <ChatArea
-    //     messagesData={messagesData}
-    //     currentChannelId={currentChannelId}
-    //     channels={channels}
-    //   />
-    // </div>
   );
 };
 
