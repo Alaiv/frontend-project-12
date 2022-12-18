@@ -1,15 +1,18 @@
 import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import AuthContext from '../contexts';
 import ChatArea from './chatArea/ChatArea';
+import SideBar from './sideBar/SIdeBar';
+import { actions } from '../../redux/homePageSlice';
+import { AuthContext } from '../contexts';
 
 const Home = () => {
   const { isAuth } = useContext(AuthContext);
   const data = useSelector((state) => state.homePage);
+  const dispatch = useDispatch();
   const { channelData, messagesData } = data;
   const { channels, currentChannelId } = channelData;
 
@@ -17,21 +20,23 @@ const Home = () => {
     return <Navigate to="/login" replace />;
   }
 
+  const setChannel = (channelId) => {
+    dispatch(actions.setCurrentChat(channelId));
+  };
+
+  const addChannel = (newChannel) => {
+    dispatch(actions.addNewChannel(newChannel));
+  };
+
   return (
-    <Container className="h-100 my-4 overflow-hidden rounded shadow">
+    <Container className="my-4 overflow-hidden rounded shadow h-100">
       <Row className="h-100 bg-white flex-md-row">
-        <Col className="col-4 col-md-2 border-end pt-5 px-0 bg-light">
-          <div>
-            <h3>Channels</h3>
-            <div>
-              {Object.values(channels).map((channel) => (
-                <div key={channel.id}>
-                  #
-                  {channel.name}
-                </div>
-              ))}
-            </div>
-          </div>
+        <Col className="col-4 col-md-2 border-end pt-5 px-0 bg-dark text-light">
+          <SideBar
+            channels={channels}
+            setChannel={setChannel}
+            addChannel={addChannel}
+          />
         </Col>
         <Col className="col p-0 h-100">
           <ChatArea

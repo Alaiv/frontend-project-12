@@ -1,11 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import Home from './components/Home/Home';
-import Login from './components/Login/Login';
-import AuthContext, { socket, SocketContext } from './components/contexts';
+import { AuthContext, socket, SocketContext } from './components/contexts';
 import { getUserData } from './components/api/ApiProvider';
 import { actions } from './redux/homePageSlice.js';
 import PageRoutes from './PageRoutes';
@@ -31,7 +29,9 @@ const App = () => {
     <AuthContext.Provider value={authData}>
       <SocketContext.Provider value={socket}>
         <BrowserRouter>
-          <PageRoutes />
+          <div className="d-flex flex-column h-100 bg-light">
+            <PageRoutes />
+          </div>
         </BrowserRouter>
       </SocketContext.Provider>
     </AuthContext.Provider>

@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import cl from './Login.module.css';
 import { loginUser } from '../api/ApiProvider';
-import AuthContext from '../contexts';
+import { AuthContext } from '../contexts';
 
 const Login = () => {
   const { isAuth, setIsAuth } = useContext(AuthContext);

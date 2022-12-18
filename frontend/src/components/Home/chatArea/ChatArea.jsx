@@ -5,9 +5,10 @@ import Button from 'react-bootstrap/esm/Button.js';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/esm/Row.js';
 import Col from 'react-bootstrap/esm/Col.js';
+import Container from 'react-bootstrap/esm/Container.js';
 import { sendMessage } from '../../api/SocketProvider.js';
 import { actions } from '../../../redux/homePageSlice';
-import AuthContext, { SocketContext } from '../../contexts';
+import { SocketContext, AuthContext } from '../../contexts';
 
 const ChatArea = ({ channels, currentChannelId, messagesData }) => {
   const dispatch = useDispatch();
@@ -31,22 +32,21 @@ const ChatArea = ({ channels, currentChannelId, messagesData }) => {
   });
 
   return (
-    <div>
-      <h3>
-        Current active chat:
-        {' '}
-        {channels[currentChannelId]?.name}
-      </h3>
+    <div className="d-flex flex-column h-100">
+      <div className="bg-dark mb-4 p-3 shadow-sm small text-light">
+        <p className="m-0"><b>{`# ${channels[currentChannelId]?.name}`}</b></p>
+      </div>
       <div className="chat-messages overflow-auto px-5 ">
         {messagesData.messages
           .filter((msg) => msg.currentChannelId === currentChannelId)
           .map((message) => (
             <React.Fragment key={message.id}>
-              <b>
-                {message.username}
-                {' '}
-              </b>
-              <p>{message.body}</p>
+              <div className="text-break mb-2">
+                <b>
+                  {message.username}
+                </b>
+                {`: ${message.body}`}
+              </div>
             </React.Fragment>
           ))}
       </div>

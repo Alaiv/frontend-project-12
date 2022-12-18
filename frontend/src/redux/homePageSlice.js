@@ -25,6 +25,14 @@ const homePageSlice = createSlice({
     setMessage: (state, { payload }) => {
       state.messagesData.messages.push(payload);
     },
+    setCurrentChat: (state, { payload }) => {
+      state.channelData.currentChannelId = payload;
+    },
+    addNewChannel: (state, { payload }) => {
+      const { id } = payload;
+      state.channelData.channels[id] = payload;
+      state.channelData.currentChannelId = id;
+    },
   },
 });
 
