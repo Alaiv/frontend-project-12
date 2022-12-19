@@ -1,25 +1,55 @@
+import { useFormik } from 'formik';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+import { myHandleSubmitWithSocket } from '../../utils/helpers';
 
 const MyModal = ({
-  formik, actionName, btnView, title, action,
+  type, actionName, btnView, title, action, socket, channelData, id = null,
 }) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const formik = useFormik({
+    initialValues: {
+      channelName: '',
+    },
+    onSubmit: (values, { setErrors, resetForm }) => {
+      myHandleSubmitWithSocket(
+        { ...values, id },
+        setErrors,
+        socket,
+        resetForm,
+        channelData,
+        action,
+        handleClose,
+      );
+    },
+  });
+
   return (
     <>
-      <Button className="text-dark btn btn-group-vertical btn-light" onClick={handleShow}>{btnView}</Button>
+      <Button className="text-dark btn btn-group-vertical w-20 btn-light" onClick={handleShow}>{btnView}</Button>
       <Modal show={show} onHide={handleClose} centered>
 
         <Modal.Header closeButton>
           <Modal.Title>{actionName}</Modal.Title>
         </Modal.Header>
         <Modal.Body>{title}</Modal.Body>
-        {formik
+        {type === 'remove'
           ? (
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Отмена
+              </Button>
+              <Button variant="primary" onClick={() => action(handleClose)} className="btn-danger">
+                {actionName}
+              </Button>
+            </Modal.Footer>
+          )
+          : (
             <Form onSubmit={formik.handleSubmit}>
               <Modal.Body>
                 <Form.Group className="mb-3">
@@ -39,21 +69,11 @@ const MyModal = ({
                 <Button variant="secondary" onClick={handleClose}>
                   Закрыть
                 </Button>
-                <Button variant="primary" type="submit" onClick={handleClose}>
+                <Button variant="primary" type="submit">
                   {actionName}
                 </Button>
               </Modal.Footer>
             </Form>
-          )
-          : (
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Отмена
-              </Button>
-              <Button variant="primary" onClick={() => action(handleClose)} className="btn-danger">
-                {actionName}
-              </Button>
-            </Modal.Footer>
           )}
 
       </Modal>

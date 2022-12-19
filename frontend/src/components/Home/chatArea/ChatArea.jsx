@@ -58,7 +58,7 @@ const ChatArea = ({ channels, currentChannelId, messagesData }) => {
               required
               className="border-0 p-0 ps-2 form-control"
             />
-            <Button variant="primary" type="submit" className="btn btn-group-vertical">Отправить</Button>
+            <Button variant="primary" type="submit" className="btn btn-group-vertical"><span>+</span></Button>
           </div>
         </Form>
       </div>

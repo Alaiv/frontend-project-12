@@ -13,6 +13,7 @@ export const myHandleSubmitWithSocket = (
   resetForm,
   channelData,
   f,
+  handleClose,
 ) => {
   if (!values.channelName.length) {
     setErrors({ channelName: 'Поле обязательно' });
@@ -22,6 +23,7 @@ export const myHandleSubmitWithSocket = (
   if (checkForDuplicate(values.channelName, Object.values(channelData.channels))) {
     f(socket, values);
     resetForm({ channelName: '' });
+    handleClose();
   } else {
     setErrors({ channelName: 'Имя должно быть уникальным' });
     return false;

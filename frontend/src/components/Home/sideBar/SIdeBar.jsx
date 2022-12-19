@@ -1,15 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Button from 'react-bootstrap/esm/Button';
-import {
-  useFormik,
-} from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import MyModal from '../../UI/MyModal';
 import { actions } from '../../../redux/homePageSlice';
 import { SocketContext } from '../../contexts';
 import { createChannel, removeTheChannel, renameChannel } from '../../api/SocketProvider';
 import MyDropDown from '../../UI/MyDropDown';
-import { myHandleSubmitWithSocket } from '../../../utils/helpers';
 
 const SideBar = ({ channels, setChannel }) => {
   const { channelData } = useSelector((state) => state.homePage);
@@ -33,29 +29,20 @@ const SideBar = ({ channels, setChannel }) => {
     act();
   };
 
-  const formik = useFormik({
-    initialValues: {
-      channelName: '',
-    },
-    onSubmit: (values, { setErrors, resetForm }) => {
-      const isValid = myHandleSubmitWithSocket(
-        values,
-        setErrors,
-        socket,
-        resetForm,
-        channelData,
-        createChannel,
-      );
-    },
-  });
-
   return (
     <>
       <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
-        <h3>
+        <span>
           Каналы
-        </h3>
-        <MyModal formik={formik} actionName="Создать канал" btnView="+" />
+        </span>
+        <MyModal
+          actionName="Создать канал"
+          btnView="+"
+          action={createChannel}
+          socket={socket}
+          channelData={channelData}
+          type="create"
+        />
       </div>
       <ul className="nav flex-column nav-pills nav-fill px-2">
         {Object.values(channels).map((channel) => (
