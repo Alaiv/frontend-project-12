@@ -24,10 +24,6 @@ const Home = () => {
     dispatch(actions.setCurrentChat(channelId));
   };
 
-  const addChannel = (newChannel) => {
-    dispatch(actions.addNewChannel(newChannel));
-  };
-
   return (
     <Container className="my-4 overflow-hidden rounded shadow h-100">
       <Row className="h-100 bg-white flex-md-row">
@@ -35,7 +31,6 @@ const Home = () => {
           <SideBar
             channels={channels}
             setChannel={setChannel}
-            addChannel={addChannel}
           />
         </Col>
         <Col className="col p-0 h-100">

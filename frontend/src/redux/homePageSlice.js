@@ -33,6 +33,29 @@ const homePageSlice = createSlice({
       state.channelData.channels[id] = payload;
       state.channelData.currentChannelId = id;
     },
+    renameTheChannel: (state, { payload }) => {
+      const { id, name } = payload;
+      state.channelData.channels[id].name = name;
+    },
+    removeChannel: (state, { payload }) => {
+      const newChannels = Object.values(state.channelData.channels)
+        .filter((channel) => payload.id !== channel.id)
+        .reduce((acc, val) => {
+          const { id } = val;
+          acc[id] = val;
+          return acc;
+        }, {});
+
+      const newComments = state.messagesData.messages
+        .filter((msg) => payload.id !== msg.channelId);
+
+      if (state.channelData.currentChannelId === payload.id) {
+        state.channelData.currentChannelId = 1;
+      }
+
+      state.channelData.channels = newChannels;
+      state.messagesData.messages = newComments;
+    },
   },
 });
 

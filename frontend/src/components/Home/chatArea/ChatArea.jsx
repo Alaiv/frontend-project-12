@@ -3,9 +3,6 @@ import React, { useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import Button from 'react-bootstrap/esm/Button.js';
 import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/esm/Row.js';
-import Col from 'react-bootstrap/esm/Col.js';
-import Container from 'react-bootstrap/esm/Container.js';
 import { sendMessage } from '../../api/SocketProvider.js';
 import { actions } from '../../../redux/homePageSlice';
 import { SocketContext, AuthContext } from '../../contexts';
@@ -51,15 +48,18 @@ const ChatArea = ({ channels, currentChannelId, messagesData }) => {
           ))}
       </div>
       <div className="mt-auto px-5 py-3">
-        <Form onSubmit={formik.handleSubmit} className="py-1">
-          <Row>
-            <Col>
-              <Form.Control name="message" id="message" onChange={formik.handleChange} value={formik.values.message} required />
-            </Col>
-            <Col>
-              <Button variant="primary" type="submit">Отправить</Button>
-            </Col>
-          </Row>
+        <Form onSubmit={formik.handleSubmit} className="py-1 border rounded-2">
+          <div className="input-group has-validation">
+            <Form.Control
+              name="message"
+              id="message"
+              onChange={formik.handleChange}
+              value={formik.values.message}
+              required
+              className="border-0 p-0 ps-2 form-control"
+            />
+            <Button variant="primary" type="submit" className="btn btn-group-vertical">Отправить</Button>
+          </div>
         </Form>
       </div>
     </div>

@@ -1,72 +1,87 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/esm/Button';
 import {
   useFormik,
 } from 'formik';
-import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import MyModal from '../../UI/MyModal';
 import { actions } from '../../../redux/homePageSlice';
 import { SocketContext } from '../../contexts';
-import { createChannel } from '../../api/SocketProvider';
+import { createChannel, removeTheChannel, renameChannel } from '../../api/SocketProvider';
+import MyDropDown from '../../UI/MyDropDown';
+import { myHandleSubmitWithSocket } from '../../../utils/helpers';
 
-const SideBar = ({ channels, setChannel, addChannel }) => {
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+const SideBar = ({ channels, setChannel }) => {
   const { channelData } = useSelector((state) => state.homePage);
   const dispatch = useDispatch();
   const socket = useContext(SocketContext);
-
-  const checkForDuplicate = (createdCname, stateChannels) => (
-    stateChannels.every(({ name }) => name !== createdCname)
-  );
 
   useEffect(() => {
     socket.on('newChannel', (payload) => {
       dispatch(actions.addNewChannel(payload));
     });
+    socket.on('renameChannel', (payload) => {
+      dispatch(actions.renameTheChannel(payload));
+    });
+    socket.on('removeChannel', (payload) => {
+      dispatch(actions.removeChannel(payload));
+    });
   }, []);
+
+  const deleteChannel = (id) => (act) => {
+    removeTheChannel(socket, id);
+    act();
+  };
 
   const formik = useFormik({
     initialValues: {
       channelName: '',
     },
-    validationSchema: Yup.object({
-      channelName: Yup.string().required('Поле обязательно'),
-    }),
     onSubmit: (values, { setErrors, resetForm }) => {
-      if (checkForDuplicate(values.channelName, Object.values(channelData.channels))) {
-        createChannel(socket, values.channelName);
-        handleClose();
-        resetForm({ channelName: '' });
-      } else {
-        setErrors({ channelName: 'Имя должно быть уникальным' });
-      }
+      const isValid = myHandleSubmitWithSocket(
+        values,
+        setErrors,
+        socket,
+        resetForm,
+        channelData,
+        createChannel,
+      );
     },
   });
 
   return (
-    <div>
+    <>
       <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
         <h3>
           Каналы
         </h3>
-        <Button className="text-dark btn btn-group-vertical btn-light" onClick={handleShow}>+</Button>
+        <MyModal formik={formik} actionName="Создать канал" btnView="+" />
       </div>
-      <div className="d-flex flex-column">
+      <ul className="nav flex-column nav-pills nav-fill px-2">
         {Object.values(channels).map((channel) => (
-          <div key={channel.id}>
-            <Button onClick={() => setChannel(channel.id)} type="button" className="btn-dark">
-              #
-              {channel.name}
-            </Button>
-            {channel.removable && <b>hi</b>}
-          </div>
+          <li key={channel.id} className="nav-item w-100">
+            {channel.removable
+              ? (
+                <MyDropDown
+                  channelName={channel.name}
+                  onClick={() => setChannel(channel.id)}
+                  socket={socket}
+                  channelData={channelData}
+                  renameChannel={renameChannel}
+                  id={channel.id}
+                  deleteChannel={deleteChannel}
+                />
+              )
+              : (
+                <Button onClick={() => setChannel(channel.id)} type="button" className="btn-dark w-100 rounded-0 text-start btn">
+                  {`# ${channel.name}`}
+                </Button>
+
+              )}
+          </li>
         ))}
-      </div>
-      <MyModal show={show} handleClose={handleClose} formik={formik} />
-    </div>
+      </ul>
+    </>
   );
 };
 

@@ -31,7 +31,8 @@ const Login = () => {
           setIsAuth(true);
           setStatus(null);
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log(e);
           setStatus('Неверный логин или пароль');
         });
       resetForm({ userName: '', password: '' });

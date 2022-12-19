@@ -17,8 +17,12 @@ const App = () => {
   useEffect(() => {
     const getData = async () => {
       const { setAllData } = actions;
-      const data = await getUserData(token);
-      dispatch(setAllData(data));
+      try {
+        const data = await getUserData(token);
+        dispatch(setAllData(data));
+      } catch (e) {
+        console.log(e);
+      }
     };
     if (isAuth) getData();
   }, [isAuth]);
